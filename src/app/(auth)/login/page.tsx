@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import { FiBook } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,7 +27,7 @@ export default function LoginPage() {
         toast.error(result.error || "Invalid email or password");
       } else {
         toast.success("Login successful!");
-        router.push("/dashboard");
+        window.location.href = "/dashboard";
       }
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -41,8 +40,9 @@ export default function LoginPage() {
     <div className="w-full max-w-md">
       <div className="bg-white rounded-2xl shadow-sm p-8">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 bg-primary-500 text-white rounded-xl flex items-center justify-center mb-4">
-            <FiBook className="w-7 h-7" />
+          <div className="flex items-center gap-2 mb-4">
+            <img src="/logo.png" alt="NDI" className="h-10 w-auto" />
+            <span className="text-xl font-bold text-primary-500">eLibrary</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
           <p className="text-gray-500 text-sm mt-1">
@@ -76,15 +76,25 @@ export default function LoginPage() {
             >
               Password
             </label>
-            <input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input-field w-full"
-              placeholder="Enter your password"
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-field w-full pr-10"
+                placeholder="Enter your password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+              </button>
+            </div>
           </div>
 
           <button

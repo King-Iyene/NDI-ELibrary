@@ -37,8 +37,8 @@ export default function HomePage() {
       <header className="bg-gradient-to-br from-primary-600 to-primary-500 text-white">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <FiBook className="w-8 h-8 text-accent-300" />
-            <span className="text-xl font-bold">NDI E-Library</span>
+            <img src="/logo.png" alt="NDI" className="h-9 w-auto brightness-0 invert" />
+            <span className="text-xl font-bold">eLibrary</span>
           </div>
           <div className="flex items-center gap-4">
             <Link
@@ -59,7 +59,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6">
             Welcome to the{" "}
-            <span className="text-accent-300">NDI E-Library</span>
+            <span className="text-accent-300">NDI eLibrary</span>
           </h1>
           <p className="text-lg sm:text-xl max-w-2xl mx-auto text-primary-100 mb-10">
             Niger Delta Innovate&apos;s digital library platform. Discover,
