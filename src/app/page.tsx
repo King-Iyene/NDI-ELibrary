@@ -37,9 +37,7 @@ export default function HomePage() {
       <header className="bg-gradient-to-br from-primary-600 to-primary-500 text-white">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">N</span>
-            </div>
+            <img src="/logo.png" alt="NDI" className="h-9 w-auto brightness-0 invert" />
             <span className="text-xl font-bold">eLibrary</span>
           </div>
           <div className="flex items-center gap-4">

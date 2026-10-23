@@ -73,9 +73,7 @@ export default function RegisterPage() {
       <div className="bg-white rounded-2xl shadow-sm p-8">
         <div className="flex flex-col items-center mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-primary-500 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">N</span>
-            </div>
+            <img src="/logo.png" alt="NDI" className="h-10 w-auto" />
             <span className="text-xl font-bold text-primary-500">eLibrary</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>

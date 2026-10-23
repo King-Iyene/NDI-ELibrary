@@ -60,9 +60,7 @@ export default function Sidebar() {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-2 px-6 py-5 border-b border-gray-200">
-        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-500 text-white font-bold text-lg">
-          N
-        </div>
+        <img src="/logo.png" alt="NDI" className="h-8 w-auto" />
         <span className="text-lg font-bold text-primary-500">eLibrary</span>
       </div>
 
