@@ -58,12 +58,12 @@ export default function Sidebar() {
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
-      {/* Logo / Title */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
-        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-600 text-white font-bold text-lg">
+      {/* Logo */}
+      <div className="flex items-center gap-2 px-6 py-5 border-b border-gray-200">
+        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-500 text-white font-bold text-lg">
           N
         </div>
-        <span className="text-lg font-semibold text-gray-900">NDI E-Library</span>
+        <span className="text-lg font-bold text-primary-500">eLibrary</span>
       </div>
 
       {/* Navigation */}
