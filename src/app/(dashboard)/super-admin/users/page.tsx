@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiUsers, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiUsers, FiChevronLeft, FiChevronRight, FiEdit2 } from "react-icons/fi";
 import toast from "react-hot-toast";
 
 interface User {
@@ -21,12 +21,17 @@ const roleBadge: Record<string, string> = {
   user: "bg-gray-100 text-gray-700",
 };
 
+const roleOptions = ["super_admin", "admin", "student"];
+
 export default function SuperAdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [roleFilter, setRoleFilter] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editRole, setEditRole] = useState("");
+  const [updating, setUpdating] = useState(false);
 
   const fetchUsers = async (p: number, role: string) => {
     setLoading(true);
@@ -51,6 +56,28 @@ export default function SuperAdminUsersPage() {
     fetchUsers(page, roleFilter);
   }, [page, roleFilter]);
 
+  const handleRoleUpdate = async (userId: string) => {
+    setUpdating(true);
+    try {
+      const res = await fetch(`/api/users/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: editRole }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to update role");
+      }
+      toast.success("Role updated successfully");
+      setEditingId(null);
+      fetchUsers(page, roleFilter);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to update role");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   const formatDate = (d: string) =>
@@ -66,7 +93,7 @@ export default function SuperAdminUsersPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-800">All Users</h1>
           <p className="text-gray-500 text-sm mt-1">
-            View and filter all registered users
+            View, filter and manage user roles
           </p>
         </div>
         <select
@@ -81,7 +108,6 @@ export default function SuperAdminUsersPage() {
           <option value="super_admin">Super Admin</option>
           <option value="admin">Admin</option>
           <option value="student">Student</option>
-          <option value="user">User</option>
         </select>
       </div>
 
@@ -103,6 +129,7 @@ export default function SuperAdminUsersPage() {
                     <th className="px-4 py-3 font-medium">Email</th>
                     <th className="px-4 py-3 font-medium">Role</th>
                     <th className="px-4 py-3 font-medium">Joined</th>
+                    <th className="px-4 py-3 font-medium">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -116,16 +143,60 @@ export default function SuperAdminUsersPage() {
                       </td>
                       <td className="px-4 py-3 text-gray-600">{user.email}</td>
                       <td className="px-4 py-3">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            roleBadge[user.role] || roleBadge.user
-                          }`}
-                        >
-                          {user.role}
-                        </span>
+                        {editingId === user.id ? (
+                          <select
+                            value={editRole}
+                            onChange={(e) => setEditRole(e.target.value)}
+                            className="px-2 py-1 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+                          >
+                            {roleOptions.map((r) => (
+                              <option key={r} value={r}>
+                                {r.replace("_", " ")}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              roleBadge[user.role] || roleBadge.user
+                            }`}
+                          >
+                            {user.role.replace("_", " ")}
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-gray-600">
                         {formatDate(user.created_at)}
+                      </td>
+                      <td className="px-4 py-3">
+                        {editingId === user.id ? (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleRoleUpdate(user.id)}
+                              disabled={updating || editRole === user.role}
+                              className="px-3 py-1 bg-primary-600 text-white text-xs rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
+                            >
+                              {updating ? "Saving..." : "Save"}
+                            </button>
+                            <button
+                              onClick={() => setEditingId(null)}
+                              className="px-3 py-1 text-gray-600 text-xs border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setEditingId(user.id);
+                              setEditRole(user.role);
+                            }}
+                            className="p-1.5 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition"
+                            title="Change role"
+                          >
+                            <FiEdit2 size={16} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
