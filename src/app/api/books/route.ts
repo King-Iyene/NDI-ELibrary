@@ -69,8 +69,7 @@ export async function POST(req: NextRequest) {
         title: body.title,
         author: body.author,
         description: body.description,
-        isbn: body.isbn || null,
-        category_id: body.category_id,
+        category_id: body.category_id || null,
         cover_image: body.cover_image || "",
         file_url: body.file_url,
         pages: body.pages || null,
@@ -84,7 +83,9 @@ export async function POST(req: NextRequest) {
 
     if (error) throw error;
 
-    await supabaseAdmin.rpc("increment_book_count", { cat_id: body.category_id });
+    if (body.category_id) {
+      await supabaseAdmin.rpc("increment_book_count", { cat_id: body.category_id });
+    }
 
     return NextResponse.json(book, { status: 201 });
   } catch (error: any) {

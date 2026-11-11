@@ -22,7 +22,6 @@ interface Book {
   title: string;
   author: string;
   description: string;
-  isbn: string;
   category_id: string;
   category?: { name: string };
   published_year: number;
@@ -41,7 +40,6 @@ const initialForm = {
   title: "",
   author: "",
   description: "",
-  isbn: "",
   category_id: "",
   published_year: new Date().getFullYear(),
   publisher: "",
@@ -102,7 +100,6 @@ export default function AdminBooksPage() {
       title: book.title,
       author: book.author,
       description: book.description || "",
-      isbn: book.isbn || "",
       category_id: book.category_id || "",
       published_year: book.published_year || new Date().getFullYear(),
       publisher: book.publisher || "",
@@ -312,20 +309,14 @@ export default function AdminBooksPage() {
                 <textarea required rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="input-field" />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">ISBN</label>
-                  <input type="text" value={form.isbn} onChange={(e) => setForm({ ...form, isbn: e.target.value })} className="input-field" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-                  <select required value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value })} className="input-field">
-                    <option value="">Select category</option>
-                    {categories.map((cat) => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <select value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value })} className="input-field">
+                  <option value="">No category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
