@@ -35,9 +35,16 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     const body = await req.json();
+    const updateData: Record<string, any> = { updated_at: new Date().toISOString() };
+    const allowed = ["title", "author", "description", "category_id", "cover_image", "file_url", "pages", "language", "published_year", "publisher", "is_active"];
+    for (const key of allowed) {
+      if (key in body) {
+        updateData[key] = key === "category_id" ? (body[key] || null) : body[key];
+      }
+    }
     const { data: book, error } = await supabaseAdmin
       .from("books")
-      .update({ ...body, updated_at: new Date().toISOString() })
+      .update(updateData)
       .eq("id", params.id)
       .select()
       .single();

@@ -147,6 +147,7 @@ export default function AdminBooksPage() {
 
       const bookData = {
         ...form,
+        category_id: form.category_id || null,
         cover_image: coverUrl,
         file_url: fileUrl,
       };
